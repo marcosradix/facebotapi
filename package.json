@@ -1,0 +1,17 @@
+{
+  "name": "facebotapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3",
+    "mongoose": "^5.1.6",
+    "nodemon": "^1.17.5"
+  }
+}
