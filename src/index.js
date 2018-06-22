@@ -9,7 +9,7 @@ const request = require('request');
 
 
 const AUTH_TOKEN = '46BE733144A8D37F528041B7505CD7D2'
-const FACEBOOK_TOKEN = 'EAAZA8zFKWjScBAIi0GZBjf0b6ZASo7DMJHKZACGh46XFou7J08ahYHzmQAibffIf7IMfJ9jm7ZAIclYTdN6CXv4qCLw7reQFbA7MAJSvmPCT36uaE4DYbml3OXpEZAYEAT7uASEr6sZCkUraLZB9J2VKnhhw2kUbC0ztEZAdYG6VX6yX0Vkcy3y8f';
+const FACEBOOK_TOKEN = 'EAACOLZBwSZA94BAGcZBWfdVr6B8MsoDZBB03dsmr1ABaGKbSgZCZBU4ZBg14DRzVR0wGUoZBtO34TZAZAuaq3gaIWb66oA40k4yROSduWxi8a5eDZAPUhqxguBWGa3n3bQZAWsWFwuBTbdNdcmTHutJt9ZCY1MtS9QyyVAwmQISlcQfTm5OwS8eJFUuMc';
 var app = express();
 
 app.use(bodyParser.json());
@@ -25,6 +25,7 @@ app.get('/', (req, resp) =>{
 
 app.get('/webhook', (req, resp) =>{
     if(req.query['hub.mode'] === 'subscribe' && req.query['hub.verify_token'] === AUTH_TOKEN){
+        console.log('Conexão estabelecida com sucesso.');
         resp.status(200).send(req.query['hub.challenge']);
     }else{
         console.log('Erro de validação');
@@ -67,28 +68,43 @@ function trataMensagem(event){
     console.log('Wormade company %s',messageID );
     console.log('Wormade company %s',messageText );
 
+
     if(messageText){
-        switch(messageText){
+        switch(messageText.toLowerCase()){
             case 'oi' :
-            enviarMenssagemDeTexto(senderID, 'Opa, tudo em ordem por aqui!');
+            enviarMenssagemDeTexto(senderID, 'Oi, digite a primeira letra do seu nome.');
+            break;
+
+            case 'j' :
+            enviarMenssagemDeTexto(senderID, 'humm, Babylene :)');
+            break;
+
+            case 'm' :
+            enviarMenssagemDeTexto(senderID, 'Opa Marcão ;)');
+            break;
+
+            case 'ajuda' :
+            enviarMenssagemDeTexto(senderID, 'Abaixo algumas opções quem pode te ajudar.');
             break;
 
             case 'tchau' :
-            
+            enviarMenssagemDeTexto(senderID, 'Tchau, volte quando quiser! ;)');
             break;
 
             default :
+            enviarMenssagemDeTexto(senderID, 'Tente ser mais objetivo, se quiser digite ajuda.');
             break;
         }
     }else if(anexo){
         console.log('Legal acabei de receber anexos.');
+        enviarMenssagemDeTexto(senderID, '(y)');
     }
 
 
 }
 
 
-function chamarEnviarApi(messageData){
+function chamarEnviarMenssagemApi(messageData){
     request({
         uri:'https://graph.facebook.com/v2.6/me/messages',
         qs: {access_token: FACEBOOK_TOKEN},
@@ -116,6 +132,6 @@ function enviarMenssagemDeTexto(recipientID, messageText){
         }
     };
 
-    chamarEnviarApi(messageData);
+    chamarEnviarMenssagemApi(messageData);
 }
 
